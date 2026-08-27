@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute, { GuestRoute } from './components/ProtectedRoute'
 import { useAuth } from './hooks/useAuth'
+import { useIdleLogout } from './hooks/useIdleLogout'
 import { changePasswordPathForRole, homePathForRole, loginPathForLocation } from './auth/authStorage'
 import PartnerLoginPage from './pages/PartnerLoginPage'
 import AdminLoginPage from './pages/AdminLoginPage'
@@ -31,6 +32,8 @@ function HomeRedirect() {
 }
 
 export default function App() {
+  useIdleLogout()
+
   return (
     <Routes>
       <Route

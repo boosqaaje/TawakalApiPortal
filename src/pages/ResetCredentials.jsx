@@ -129,7 +129,7 @@ function ResetCredentialsForm({
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-500 disabled:opacity-70"
+          className="btn-brand px-4 py-2.5 disabled:opacity-70"
         >
           {submitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />}
           Reset password

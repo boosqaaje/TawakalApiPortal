@@ -38,7 +38,7 @@ export default function ResetSecret() {
         {message && <p className="text-sm text-slate-500">{message}</p>}
         <button
           type="submit"
-          className="rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-500"
+          className="btn-brand px-4 py-2.5"
         >
           Reset client secret
         </button>

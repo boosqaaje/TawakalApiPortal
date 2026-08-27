@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Building2, Eye, EyeOff, LoaderCircle, Lock, Mail, Shield, User } from 'lucide-react'
+import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from 'lucide-react'
 import { loginPortalPartner, loginPortalUser } from '../api/authApi'
 import { changePasswordPathForRole, homePathForRole } from '../auth/authStorage'
 import {
@@ -9,6 +9,7 @@ import {
   stripDoubleSpacePeriod,
 } from '../auth/partnerUsername'
 import { useAuth } from '../hooks/useAuth'
+import SoftwayLogo from './SoftwayLogo'
 
 const initialErrors = { identifier: '', password: '', form: '' }
 
@@ -20,18 +21,17 @@ const variants = {
   partner: {
     title: 'Partner Sign In',
     badge: 'Partner access',
-    subtitle: 'This page is for Tawakal partners. Sign in with your partner username.',
+    subtitle: 'This page is for Softway partners. Sign in with your partner username.',
     identifierLabel: 'Username',
     identifierPlaceholder: 'partner-username',
     identifierName: 'portal-username',
     submitLabel: 'Sign in as Partner',
     submittingLabel: 'Signing in…',
-    documentTitle: 'Partner Login · Tawakal MTransfer',
-    Icon: Building2,
+    documentTitle: 'Partner Login · Softway',
     IdentifierIcon: User,
     accent: {
-      iconWrap: 'bg-cyan-50 text-cyan-700',
-      badge: 'bg-cyan-50 text-cyan-800 ring-cyan-200',
+      iconWrap: 'bg-primary-50 text-brand-blue',
+      badge: 'bg-primary-50 text-brand-blue ring-primary-200',
     },
   },
   admin: {
@@ -43,12 +43,11 @@ const variants = {
     identifierName: 'portal-email',
     submitLabel: 'Sign in as Admin',
     submittingLabel: 'Signing in…',
-    documentTitle: 'Admin Login · Tawakal MTransfer',
-    Icon: Shield,
+    documentTitle: 'Admin Login · Softway',
     IdentifierIcon: Mail,
     accent: {
-      iconWrap: 'bg-primary-50 text-primary-700',
-      badge: 'bg-primary-50 text-primary-800 ring-primary-200',
+      iconWrap: 'bg-emerald-50 text-brand-green',
+      badge: 'bg-emerald-50 text-brand-green ring-emerald-200',
     },
   },
 }
@@ -75,7 +74,7 @@ export default function LoginForm({ variant }) {
   useEffect(() => {
     document.title = copy.documentTitle
     return () => {
-      document.title = 'Tawakal MTransfer'
+      document.title = 'Softway'
     }
   }, [copy.documentTitle])
 
@@ -134,23 +133,21 @@ export default function LoginForm({ variant }) {
     }
   }
 
-  const { Icon, IdentifierIcon } = copy
+  const { IdentifierIcon } = copy
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#e8eef5] px-4 py-8 text-slate-900">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.95),transparent_48%),radial-gradient(circle_at_18%_82%,rgba(186,210,235,0.45),transparent_36%),radial-gradient(circle_at_88%_78%,rgba(196,214,236,0.5),transparent_38%)]" />
-
-      <div className="relative z-10 w-full max-w-[440px] rounded-2xl bg-white px-8 py-10 shadow-[0_24px_60px_rgba(15,23,42,0.08)] sm:px-10">
+    <div className="flex min-h-screen items-center justify-center bg-[#f3f5f8] px-4 py-8 text-slate-900">
+      <div className="w-full max-w-[440px] rounded-2xl bg-white px-8 py-10 shadow-[0_24px_60px_rgba(15,23,42,0.12)] sm:px-10">
         <div className="mb-8 text-center">
-          <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${copy.accent.iconWrap}`}>
-            <Icon className="h-6 w-6" />
+          <div className="mb-5 flex justify-center">
+            <SoftwayLogo />
           </div>
           <span
             className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ring-1 ${copy.accent.badge}`}
           >
             {copy.badge}
           </span>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#071226]">{copy.title}</h1>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">{copy.title}</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-500">{copy.subtitle}</p>
         </div>
 
@@ -235,7 +232,7 @@ export default function LoginForm({ variant }) {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#050B1B] text-sm font-semibold text-white transition-colors hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
+            className="btn-brand h-12 w-full"
           >
             {submitting && <LoaderCircle className="h-4 w-4 animate-spin" />}
             {submitting ? copy.submittingLabel : copy.submitLabel}
@@ -244,14 +241,11 @@ export default function LoginForm({ variant }) {
 
         <p className="mt-6 text-center text-sm text-slate-500">
           Don&apos;t have an account?{' '}
-          <a href="mailto:support@tawakalmtransfer.com" className="font-semibold text-[#071226] hover:underline">
-            Contact Support
-          </a>
+          <span className="font-semibold text-brand-green">Contact Support</span>
         </p>
 
-        <p className="mt-8 flex items-center justify-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-slate-400">
-          <Lock className="h-3 w-3" />
-          Bank-grade encryption
+        <p className="mt-8 text-center text-[10px] font-medium uppercase tracking-[0.18em] text-slate-400">
+          Developed by Softway LLC
         </p>
       </div>
     </div>

@@ -3,6 +3,9 @@ const ROLE_KEY = 'tawakal_role'
 const EMAIL_KEY = 'tawakal_email'
 const PARTNER_NAME_KEY = 'tawakal_partner_name'
 const MUST_CHANGE_PASSWORD_KEY = 'tawakal_must_change_password'
+const LAST_ACTIVITY_KEY = 'tawakal_last_activity'
+
+export const IDLE_TIMEOUT_MS = 5 * 60 * 1000
 
 export function getStoredAuth() {
   const token = localStorage.getItem(TOKEN_KEY)
@@ -29,6 +32,7 @@ export function persistAuth({ token, role, email, partnerName, mustChangePasswor
   localStorage.setItem(ROLE_KEY, role)
   localStorage.setItem(EMAIL_KEY, email ?? '')
   localStorage.setItem(MUST_CHANGE_PASSWORD_KEY, mustChangePassword ? 'true' : 'false')
+  markSessionActivity()
 
   if (partnerName) {
     localStorage.setItem(PARTNER_NAME_KEY, partnerName)
@@ -37,12 +41,29 @@ export function persistAuth({ token, role, email, partnerName, mustChangePasswor
   }
 }
 
+export function markSessionActivity() {
+  localStorage.setItem(LAST_ACTIVITY_KEY, String(Date.now()))
+}
+
+export function getLastSessionActivity() {
+  const value = Number(localStorage.getItem(LAST_ACTIVITY_KEY))
+  return Number.isFinite(value) ? value : 0
+}
+
+export function isSessionIdle() {
+  const lastActivity = getLastSessionActivity()
+  if (!lastActivity) return true
+  return Date.now() - lastActivity >= IDLE_TIMEOUT_MS
+}
+
 export function clearAuth() {
   localStorage.removeItem(TOKEN_KEY)
   localStorage.removeItem(ROLE_KEY)
   localStorage.removeItem(EMAIL_KEY)
   localStorage.removeItem(PARTNER_NAME_KEY)
   localStorage.removeItem(MUST_CHANGE_PASSWORD_KEY)
+  localStorage.removeItem(LAST_ACTIVITY_KEY)
+  sessionStorage.clear()
 }
 
 export function parseJwtPayload(token) {

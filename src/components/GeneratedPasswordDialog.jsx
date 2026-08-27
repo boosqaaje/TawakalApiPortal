@@ -77,7 +77,7 @@ export default function GeneratedPasswordDialog({
           type="button"
           disabled={!allRequiredCopied}
           onClick={onClose}
-          className="mt-6 w-full rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:hover:bg-slate-300"
+          className="btn-brand mt-6 w-full px-4 py-2.5"
         >
           {allRequiredCopied ? 'Done' : `Copy ${formatFieldList(remainingLabels)} to continue`}
         </button>
