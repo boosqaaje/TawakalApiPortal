@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, LoaderCircle, Lock } from 'lucide-react'
+import SoftwayLogo from '../components/SoftwayLogo'
 import { changePortalPassword } from '../api/authApi'
 import { PASSWORD_POLICY_HINT, getPasswordPolicyError } from '../auth/password'
 import { homePathForRole } from '../auth/authStorage'
@@ -69,15 +70,13 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#e8eef5] px-4 py-8 text-slate-900">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.95),transparent_48%),radial-gradient(circle_at_18%_82%,rgba(186,210,235,0.45),transparent_36%),radial-gradient(circle_at_88%_78%,rgba(196,214,236,0.5),transparent_38%)]" />
-
-      <div className="relative z-10 w-full max-w-[440px] rounded-2xl bg-white px-8 py-10 shadow-[0_24px_60px_rgba(15,23,42,0.08)] sm:px-10">
+    <div className="flex min-h-screen items-center justify-center bg-[#f3f5f8] px-4 py-8 text-slate-900">
+      <div className="w-full max-w-[440px] rounded-2xl bg-white px-8 py-10 shadow-[0_24px_60px_rgba(15,23,42,0.12)] sm:px-10">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
-            <Lock className="h-6 w-6" />
+          <div className="mb-5 flex justify-center">
+            <SoftwayLogo />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#071226]">Change password</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Change password</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-500">
             You must set a new password before continuing. {PASSWORD_POLICY_HINT}
           </p>
@@ -166,7 +165,7 @@ export default function ChangePasswordPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#050B1B] text-sm font-semibold text-white transition-colors hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
+            className="btn-brand h-12 w-full"
           >
             {submitting && <LoaderCircle className="h-4 w-4 animate-spin" />}
             {submitting ? 'Saving…' : 'Update password'}

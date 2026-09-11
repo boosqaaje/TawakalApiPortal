@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       proxy: {
         '/portal': { target: apiTarget, changeOrigin: true },
-        '/partner': { target: apiTarget, changeOrigin: true },
+        '/partner/auth': { target: apiTarget, changeOrigin: true },
         '/transaction': { target: apiTarget, changeOrigin: true },
       },
     },

@@ -2,14 +2,25 @@ import { useMemo, useState } from 'react'
 import {
   clearAuth,
   displayNameFromEmail,
+  ensureTokenCookie,
   getStoredAuth,
   isPartnerRole,
+  isSessionIdle,
   persistAuth,
 } from '../auth/authStorage'
 import { AuthContext } from './authContext'
 
 export function AuthProvider({ children }) {
-  const [auth, setAuth] = useState(() => getStoredAuth())
+  const [auth, setAuth] = useState(() => {
+    const stored = getStoredAuth()
+    if (!stored) return null
+    if (isSessionIdle()) {
+      clearAuth()
+      return null
+    }
+    ensureTokenCookie()
+    return stored
+  })
 
   const value = useMemo(() => {
     const persistAndSet = (nextAuth) => {
