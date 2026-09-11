@@ -70,10 +70,8 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-white px-4 py-8 text-slate-900">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[46%] bg-brand-gradient" />
-
-      <div className="relative z-10 w-full max-w-[440px] rounded-2xl bg-white px-8 py-10 shadow-[0_24px_60px_rgba(15,23,42,0.12)] sm:px-10">
+    <div className="flex min-h-screen items-center justify-center bg-[#f3f5f8] px-4 py-8 text-slate-900">
+      <div className="w-full max-w-[440px] rounded-2xl bg-white px-8 py-10 shadow-[0_24px_60px_rgba(15,23,42,0.12)] sm:px-10">
         <div className="mb-8 text-center">
           <div className="mb-5 flex justify-center">
             <SoftwayLogo />

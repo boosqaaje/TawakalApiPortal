@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
+
+const COPY_FEEDBACK_MS = 2000
 
 function formatFieldList(labels) {
   if (labels.length === 1) return labels[0]
@@ -11,22 +13,31 @@ export default function GeneratedPasswordDialog({
   title,
   message,
   password,
+  passwordLabel = 'Password',
   extraItems = [],
   onClose,
 }) {
-  const [copiedFields, setCopiedFields] = useState(() => new Set())
+  const [confirmedFields, setConfirmedFields] = useState(() => new Set())
+  const [justCopied, setJustCopied] = useState('')
 
   const copyValue = async (field, value) => {
     await navigator.clipboard.writeText(value)
-    setCopiedFields((current) => new Set(current).add(field))
+    setConfirmedFields((current) => new Set(current).add(field))
+    setJustCopied(field)
   }
 
+  useEffect(() => {
+    if (!justCopied) return undefined
+    const timeoutId = window.setTimeout(() => setJustCopied(''), COPY_FEEDBACK_MS)
+    return () => window.clearTimeout(timeoutId)
+  }, [justCopied])
+
   const items = [
-    { label: 'Password', value: password, mustCopy: true },
+    ...(password ? [{ label: passwordLabel, value: password, mustCopy: true }] : []),
     ...extraItems.filter((item) => item.value),
   ]
   const requiredLabels = items.filter((item) => item.mustCopy).map((item) => item.label)
-  const remainingLabels = requiredLabels.filter((label) => !copiedFields.has(label))
+  const remainingLabels = requiredLabels.filter((label) => !confirmedFields.has(label))
   const allRequiredCopied = remainingLabels.length === 0
   const requiredList = formatFieldList(requiredLabels)
 
@@ -44,7 +55,7 @@ export default function GeneratedPasswordDialog({
         <p className="mt-2 text-sm text-slate-600">{message}</p>
         <p className="mt-2 text-sm font-medium text-amber-700">
           {requiredLabels.length === 1
-            ? 'Copy the password before you close this dialog. It will not be shown again.'
+            ? `Copy the ${requiredList} before you close this dialog. It will not be shown again.`
             : `Copy the ${requiredList} before you close this dialog. They will not be shown again.`}
         </p>
 
@@ -56,7 +67,7 @@ export default function GeneratedPasswordDialog({
             >
               <span className="shrink-0 text-slate-500">
                 {label}
-                {mustCopy && !copiedFields.has(label) ? (
+                {mustCopy && !confirmedFields.has(label) ? (
                   <span className="ml-1 font-sans text-[10px] font-medium text-amber-700">Required</span>
                 ) : null}
               </span>
@@ -67,7 +78,7 @@ export default function GeneratedPasswordDialog({
                 className="shrink-0 text-slate-400 hover:text-slate-700"
                 aria-label={`Copy ${label}`}
               >
-                {copiedFields.has(label) ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                {justCopied === label ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
               </button>
             </div>
           ))}

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import {
   clearAuth,
   displayNameFromEmail,
+  ensureTokenCookie,
   getStoredAuth,
   isPartnerRole,
   isSessionIdle,
@@ -17,6 +18,7 @@ export function AuthProvider({ children }) {
       clearAuth()
       return null
     }
+    ensureTokenCookie()
     return stored
   })
 

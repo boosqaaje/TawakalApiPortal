@@ -10,6 +10,7 @@ import {
 import GeneratedPasswordDialog from '../components/GeneratedPasswordDialog'
 
 const emptyForm = {
+  locationCode: '',
   partnerUsername: '',
   partnerEmail: '',
   partnerName: '',
@@ -34,15 +35,18 @@ export default function CreatePartner() {
   }
 
   const updateField = (field) => (event) => {
-    const value =
-      field === 'partnerUsername'
-        ? stripDoubleSpacePeriod(event.target.value, form.partnerUsername, lastUsernameSpaceAt.current)
-        : event.target.value
+    let value = event.target.value
+    if (field === 'partnerUsername') {
+      value = stripDoubleSpacePeriod(value, form.partnerUsername, lastUsernameSpaceAt.current)
+    } else if (field === 'locationCode') {
+      value = value.toUpperCase()
+    }
     setForm((current) => ({ ...current, [field]: value }))
   }
 
   const validate = () => {
     const next = {}
+    if (!form.locationCode.trim()) next.locationCode = 'Location code is required.'
     if (!form.partnerUsername.trim()) next.partnerUsername = 'Partner username is required.'
     else if (/\s/.test(form.partnerUsername)) next.partnerUsername = 'Spaces are not allowed in usernames.'
     if (!form.partnerEmail.trim()) {
@@ -66,6 +70,7 @@ export default function CreatePartner() {
 
     try {
       const { data } = await axiosClient.post('/portal/partners/create', {
+        locationCode: form.locationCode.trim(),
         partnerUsername: form.partnerUsername.trim(),
         password,
         partnerEmail: form.partnerEmail.trim(),
@@ -110,6 +115,23 @@ export default function CreatePartner() {
       )}
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div>
+          <label htmlFor="locationCode" className="mb-1.5 block text-sm font-medium text-slate-700">
+            Location code
+          </label>
+          <input
+            id="locationCode"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="characters"
+            spellCheck="false"
+            maxLength={45}
+            value={form.locationCode}
+            onChange={updateField('locationCode')}
+            className={`${inputClassName} uppercase`}
+          />
+          {errors.locationCode && <p className="mt-1 text-xs text-red-600">{errors.locationCode}</p>}
+        </div>
         <div>
           <label htmlFor="partnerUsername" className="mb-1.5 block text-sm font-medium text-slate-700">
             Partner username

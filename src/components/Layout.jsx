@@ -100,8 +100,10 @@ function NavGroup({ item, onNavigate }) {
 export default function Layout() {
   const { displayName, email, role, partnerName, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const items = isAdminRole(role) ? adminNav : partnerNav
+  const isApiDocs = location.pathname === '/partner/docs'
 
   const handleLogout = () => {
     const loginPath = loginPathForRole(role)
@@ -167,8 +169,8 @@ export default function Layout() {
         {sidebar}
       </aside>
 
-      <div className="min-h-screen bg-[#fafafa] text-slate-900 lg:pl-72">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white px-4 sm:px-6">
+      <div className="flex min-h-screen flex-col bg-[#fafafa] text-slate-900 lg:pl-72">
+        <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 sm:px-6">
           <button
             type="button"
             className="rounded-md p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
@@ -213,7 +215,13 @@ export default function Layout() {
           </div>
         </header>
 
-        <main className="bg-[#fafafa] p-4 sm:p-6 lg:p-8">
+        <main
+          className={
+            isApiDocs
+              ? 'flex min-h-0 flex-1 flex-col overflow-hidden bg-white'
+              : 'flex-1 bg-[#fafafa] p-4 sm:p-6 lg:p-8'
+          }
+        >
           <Outlet />
         </main>
       </div>

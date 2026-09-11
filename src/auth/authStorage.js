@@ -33,6 +33,7 @@ export function persistAuth({ token, role, email, partnerName, mustChangePasswor
   localStorage.setItem(EMAIL_KEY, email ?? '')
   localStorage.setItem(MUST_CHANGE_PASSWORD_KEY, mustChangePassword ? 'true' : 'false')
   markSessionActivity()
+  persistTokenCookie(token)
 
   if (partnerName) {
     localStorage.setItem(PARTNER_NAME_KEY, partnerName)
@@ -63,7 +64,21 @@ export function clearAuth() {
   localStorage.removeItem(PARTNER_NAME_KEY)
   localStorage.removeItem(MUST_CHANGE_PASSWORD_KEY)
   localStorage.removeItem(LAST_ACTIVITY_KEY)
+  persistTokenCookie('')
   sessionStorage.clear()
+}
+
+export function ensureTokenCookie() {
+  persistTokenCookie(localStorage.getItem(TOKEN_KEY) || '')
+}
+
+function persistTokenCookie(token) {
+  if (typeof document === 'undefined') return
+  if (!token) {
+    document.cookie = `${TOKEN_KEY}=; Path=/; Max-Age=0; SameSite=Lax`
+    return
+  }
+  document.cookie = `${TOKEN_KEY}=${encodeURIComponent(token)}; Path=/; SameSite=Lax`
 }
 
 export function parseJwtPayload(token) {
