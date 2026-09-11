@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import { getPartnerTransactions } from '../api/transactionApi'
+import { MESSAGES } from '../constants'
 
 function formatAmount(amount, currency) {
   const value = Number(amount)
@@ -53,7 +54,7 @@ export default function Transactions() {
       } catch (loadError) {
         if (!cancelled) {
           setTransactions([])
-          setError(loadError.message || 'Unable to load transactions. Please try again.')
+          setError(loadError.message || MESSAGES.unableToLoadTransactionsRetry)
         }
       } finally {
         if (!cancelled) setLoading(false)

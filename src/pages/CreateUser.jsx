@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import axiosClient from '../api/axiosClient'
 import { generateTemporaryPassword } from '../auth/password'
+import { API_PATHS, MESSAGES, ROLES } from '../constants'
 import GeneratedPasswordDialog from '../components/GeneratedPasswordDialog'
 
 const portalUserTypes = [
-  { label: 'Admin', value: 'ADMIN' },
-  { label: 'User', value: 'USER' },
+  { label: 'Admin', value: ROLES.admin },
+  { label: 'User', value: ROLES.user },
 ]
 
 const emptyForm = {
@@ -14,7 +15,7 @@ const emptyForm = {
   middleName: '',
   lastName: '',
   email: '',
-  role: 'USER',
+  role: ROLES.user,
 }
 
 const inputClassName =
@@ -55,7 +56,7 @@ export default function CreateUser() {
     setGeneratedPassword('')
 
     try {
-      const { data } = await axiosClient.post('/portal/users/create', {
+      const { data } = await axiosClient.post(API_PATHS.portalUsersCreate, {
         firstName: form.firstName.trim(),
         middleName: form.middleName.trim(),
         lastName: form.lastName.trim(),
@@ -65,7 +66,7 @@ export default function CreateUser() {
       })
 
       if (!data?.success) {
-        setErrors({ form: data?.message || 'Unable to create user.' })
+        setErrors({ form: data?.message || MESSAGES.unableToCreateUser })
         return
       }
 
@@ -73,7 +74,7 @@ export default function CreateUser() {
       setForm(emptyForm)
     } catch (error) {
       setErrors({
-        form: error.response?.data?.message || 'Unable to create user. Please try again.',
+        form: error.response?.data?.message || MESSAGES.unableToCreateUserRetry,
       })
     } finally {
       setSubmitting(false)

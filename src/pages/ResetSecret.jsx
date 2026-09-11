@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { LoaderCircle, ShieldAlert } from 'lucide-react'
 import { resetPartnerClientSecret } from '../api/partnerApi'
+import { MESSAGES } from '../constants'
 import GeneratedPasswordDialog from '../components/GeneratedPasswordDialog'
 
 export default function ResetSecret() {
@@ -25,7 +26,7 @@ export default function ResetSecret() {
       setRotated(result)
       setConfirmed(false)
     } catch (submitError) {
-      setError(submitError.message || 'Unable to reset client secret. Please try again.')
+      setError(submitError.message || MESSAGES.unableToResetSecretRetry)
     } finally {
       setSubmitting(false)
     }

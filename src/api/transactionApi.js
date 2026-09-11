@@ -1,8 +1,7 @@
 import axiosClient from './axiosClient'
 import { PortalApiError } from './authApi'
+import { API_PATHS, MESSAGES, TRANSACTION_NOT_FOUND_CODE } from '../constants'
 import { getCommonResMessage, getCommonResPayload, isCommonResSuccess } from './commonRes'
-
-const TRANSACTION_NOT_FOUND_CODE = 902
 
 function isEmptyTransactionResult(body) {
   return body?.code === TRANSACTION_NOT_FOUND_CODE
@@ -10,7 +9,7 @@ function isEmptyTransactionResult(body) {
 
 export async function getPartnerTransactions() {
   try {
-    const { data } = await axiosClient.get('/portal/partners/transactions')
+    const { data } = await axiosClient.get(API_PATHS.portalPartnersTransactions)
 
     if (isCommonResSuccess(data)) {
       const payload = getCommonResPayload(data)
@@ -22,7 +21,7 @@ export async function getPartnerTransactions() {
     }
 
     throw new PortalApiError(
-      getCommonResMessage(data, 'Unable to load transactions.'),
+      getCommonResMessage(data, MESSAGES.unableToLoadTransactions),
       data?.code,
       200,
     )
@@ -37,7 +36,7 @@ export async function getPartnerTransactions() {
     }
 
     throw new PortalApiError(
-      getCommonResMessage(data, 'Unable to load transactions. Please try again.'),
+      getCommonResMessage(data, MESSAGES.unableToLoadTransactionsRetry),
       data?.code,
       error.response?.status,
     )

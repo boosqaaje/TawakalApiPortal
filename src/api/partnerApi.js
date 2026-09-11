@@ -1,14 +1,15 @@
 import axiosClient from './axiosClient'
 import { PortalApiError } from './authApi'
+import { API_PATHS, MESSAGES } from '../constants'
 import { getCommonResMessage, getCommonResPayload, isCommonResSuccess } from './commonRes'
 
 export async function resetPartnerClientSecret() {
   try {
-    const { data } = await axiosClient.get('/portal/partners/reset-secret')
+    const { data } = await axiosClient.get(API_PATHS.portalPartnersResetSecret)
 
     if (!isCommonResSuccess(data)) {
       throw new PortalApiError(
-        getCommonResMessage(data, 'Unable to reset client secret.'),
+        getCommonResMessage(data, MESSAGES.unableToResetSecret),
         data?.code,
         200,
       )
@@ -34,7 +35,7 @@ export async function resetPartnerClientSecret() {
 
     const data = error.response?.data
     throw new PortalApiError(
-      getCommonResMessage(data, 'Unable to reset client secret. Please try again.'),
+      getCommonResMessage(data, MESSAGES.unableToResetSecretRetry),
       data?.code,
       error.response?.status,
     )

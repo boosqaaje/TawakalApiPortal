@@ -1,5 +1,6 @@
 import axiosClient from './axiosClient'
 import { sessionFromToken } from '../auth/authStorage'
+import { API_PATHS, MESSAGES } from '../constants'
 import { getCommonResMessage, getCommonResPayload, isCommonResSuccess } from './commonRes'
 
 export class PortalApiError extends Error {
@@ -20,8 +21,8 @@ async function completePortalLogin(request) {
     if (!isCommonResSuccess(data) || !session) {
       throw new PortalApiError(
         isCommonResSuccess(data)
-          ? 'Login did not return a valid session.'
-          : getCommonResMessage(data, 'Login did not return a valid session.'),
+          ? MESSAGES.loginInvalidSession
+          : getCommonResMessage(data, MESSAGES.loginInvalidSession),
         data?.code,
         200,
       )
@@ -37,9 +38,7 @@ async function completePortalLogin(request) {
     }
 
     const data = error.response?.data
-    const fallback = error.response
-      ? 'Something went wrong. Please try again.'
-      : 'Unable to reach the API at http://localhost:5278.'
+    const fallback = error.response ? MESSAGES.genericError : MESSAGES.apiUnreachable()
 
     throw new PortalApiError(
       getCommonResMessage(data, fallback),
@@ -51,7 +50,7 @@ async function completePortalLogin(request) {
 
 export function loginPortalUser({ email, password }) {
   return completePortalLogin(
-    axiosClient.post('/portal/users/login', {
+    axiosClient.post(API_PATHS.portalUserLogin, {
       email,
       password,
     }),
@@ -60,7 +59,7 @@ export function loginPortalUser({ email, password }) {
 
 export function loginPortalPartner({ username, password }) {
   return completePortalLogin(
-    axiosClient.post('/portal/partners/login', {
+    axiosClient.post(API_PATHS.portalPartnerLogin, {
       username,
       password,
     }),
@@ -69,7 +68,7 @@ export function loginPortalPartner({ username, password }) {
 
 export async function resetPortalPassword({ userType, userId, newPassword }) {
   try {
-    const { data } = await axiosClient.post('/portal/reset-password', {
+    const { data } = await axiosClient.post(API_PATHS.portalResetPassword, {
       userType: (userType ?? '').trim().toUpperCase(),
       userId: (userId ?? '').trim(),
       newPassword,
@@ -77,7 +76,7 @@ export async function resetPortalPassword({ userType, userId, newPassword }) {
 
     if (!isCommonResSuccess(data)) {
       throw new PortalApiError(
-        getCommonResMessage(data, 'Unable to reset password.'),
+        getCommonResMessage(data, MESSAGES.unableToResetPassword),
         data?.code,
         200,
       )
@@ -91,7 +90,7 @@ export async function resetPortalPassword({ userType, userId, newPassword }) {
 
     const data = error.response?.data
     throw new PortalApiError(
-      getCommonResMessage(data, 'Unable to reset password. Please try again.'),
+      getCommonResMessage(data, MESSAGES.unableToResetPasswordRetry),
       data?.code,
       error.response?.status,
     )
@@ -100,14 +99,14 @@ export async function resetPortalPassword({ userType, userId, newPassword }) {
 
 export async function changePortalPassword({ currentPassword, newPassword }) {
   try {
-    const { data } = await axiosClient.post('/portal/change-password', {
+    const { data } = await axiosClient.post(API_PATHS.portalChangePassword, {
       currentPassword,
       newPassword,
     })
 
     if (!isCommonResSuccess(data)) {
       throw new PortalApiError(
-        getCommonResMessage(data, 'Unable to change password.'),
+        getCommonResMessage(data, MESSAGES.unableToChangePassword),
         data?.code,
         200,
       )
@@ -121,7 +120,7 @@ export async function changePortalPassword({ currentPassword, newPassword }) {
 
     const data = error.response?.data
     throw new PortalApiError(
-      getCommonResMessage(data, 'Unable to change password. Please try again.'),
+      getCommonResMessage(data, MESSAGES.unableToChangePasswordRetry),
       data?.code,
       error.response?.status,
     )

@@ -1,11 +1,11 @@
+import { IDLE_TIMEOUT_MS, ROLES } from '../constants'
+
 const TOKEN_KEY = 'tawakal_token'
 const ROLE_KEY = 'tawakal_role'
 const EMAIL_KEY = 'tawakal_email'
 const PARTNER_NAME_KEY = 'tawakal_partner_name'
 const MUST_CHANGE_PASSWORD_KEY = 'tawakal_must_change_password'
 const LAST_ACTIVITY_KEY = 'tawakal_last_activity'
-
-export const IDLE_TIMEOUT_MS = 5 * 60 * 1000
 
 export function getStoredAuth() {
   const token = localStorage.getItem(TOKEN_KEY)
@@ -124,12 +124,12 @@ export function displayNameFromEmail(email) {
 }
 
 export function isPartnerRole(role) {
-  return (role ?? '').toUpperCase() === 'PARTNER'
+  return (role ?? '').toUpperCase() === ROLES.partner
 }
 
 export function isPortalRole(role) {
   const value = (role ?? '').toUpperCase()
-  return value === 'ADMIN' || value === 'USER'
+  return value === ROLES.admin || value === ROLES.user
 }
 
 export function isAdminRole(role) {
