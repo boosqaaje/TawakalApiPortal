@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import axiosClient from '../api/axiosClient'
 import { generateTemporaryPassword } from '../auth/password'
+import { API_PATHS, MESSAGES } from '../constants'
 import {
   preventPartnerUsernameSpaceInput,
   preventPartnerUsernameSpaceKeys,
@@ -69,7 +70,7 @@ export default function CreatePartner() {
     setCreated(null)
 
     try {
-      const { data } = await axiosClient.post('/portal/partners/create', {
+      const { data } = await axiosClient.post(API_PATHS.portalPartnersCreate, {
         locationCode: form.locationCode.trim(),
         partnerUsername: form.partnerUsername.trim(),
         password,
@@ -78,7 +79,7 @@ export default function CreatePartner() {
       })
 
       if (!data?.success) {
-        setErrors({ form: data?.message || 'Unable to create partner.' })
+        setErrors({ form: data?.message || MESSAGES.unableToCreatePartner })
         return
       }
 
@@ -94,7 +95,7 @@ export default function CreatePartner() {
       setForm(emptyForm)
     } catch (error) {
       setErrors({
-        form: error.response?.data?.message || 'Unable to create partner. Please try again.',
+        form: error.response?.data?.message || MESSAGES.unableToCreatePartnerRetry,
       })
     } finally {
       setSubmitting(false)

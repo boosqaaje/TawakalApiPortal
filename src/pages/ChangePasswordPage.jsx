@@ -5,6 +5,7 @@ import SoftwayLogo from '../components/SoftwayLogo'
 import { changePortalPassword } from '../api/authApi'
 import { PASSWORD_POLICY_HINT, getPasswordPolicyError } from '../auth/password'
 import { homePathForRole } from '../auth/authStorage'
+import { MESSAGES } from '../constants'
 import { useAuth } from '../hooks/useAuth'
 
 const inputClassName =
@@ -62,7 +63,7 @@ export default function ChangePasswordPage() {
     } catch (error) {
       setErrors({
         ...emptyErrors,
-        form: error.message || 'Unable to change password. Please try again.',
+        form: error.message || MESSAGES.unableToChangePasswordRetry,
       })
     } finally {
       setSubmitting(false)

@@ -1,13 +1,9 @@
 import axios from 'axios'
-import { clearAuth, getStoredAuth } from '../auth/authStorage'
-
-const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5278').replace(
-  /\/+$/,
-  '',
-)
+import { clearAuth, getStoredAuth, loginPathForLocation } from '../auth/authStorage'
+import { API_BASE_URL, AUTH_REQUEST_PATHS } from '../constants'
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.DEV ? '' : configuredBaseUrl,
+  baseURL: import.meta.env.DEV ? '' : API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -26,14 +22,10 @@ axiosClient.interceptors.response.use(
   (error) => {
     const status = error.response?.status
     const requestUrl = `${error.config?.baseURL ?? ''}${error.config?.url ?? ''}`
-    const isAuthRequest =
-      requestUrl.includes('/portal/users/login') ||
-      requestUrl.includes('/portal/partners/login') ||
-      requestUrl.includes('/portal/change-password') ||
-      requestUrl.includes('/portal/reset-password')
+    const isAuthRequest = AUTH_REQUEST_PATHS.some((path) => requestUrl.includes(path))
 
     if (status === 401 && !isAuthRequest) {
-      const loginPath = window.location.pathname.startsWith('/admin') ? '/admin/login' : '/login'
+      const loginPath = loginPathForLocation(window.location.pathname)
       clearAuth()
       if (window.location.pathname !== loginPath) {
         window.location.assign(loginPath)

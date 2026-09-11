@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { KeyRound, LoaderCircle } from 'lucide-react'
 import { resetPortalPassword } from '../api/authApi'
 import { generateTemporaryPassword } from '../auth/password'
+import { MESSAGES, ROLES } from '../constants'
 import {
   preventPartnerUsernameSpaceInput,
   preventPartnerUsernameSpaceKeys,
@@ -82,7 +83,7 @@ function ResetCredentialsForm({
       setResetResult({ password: newPassword, userId })
       setIdentifier('')
     } catch (submitError) {
-      setFormError(submitError.message || 'Unable to reset password. Please try again.')
+      setFormError(submitError.message || MESSAGES.unableToResetPasswordRetry)
     } finally {
       setSubmitting(false)
     }
@@ -156,7 +157,7 @@ export function ResetUserPassword() {
       description="Issue a new password for a portal user. Enter their email address."
       identifierLabel="User email"
       identifierKind="email"
-      userType="USER"
+      userType={ROLES.user}
       dialogTitle="User password reset"
       dialogMessage="Share this temporary password with the portal user. They will be asked to change it on next login."
       extraItemLabel="Email"
@@ -171,7 +172,7 @@ export function ResetPartnerPassword() {
       description="Issue a new password for a partner. Enter their partner username."
       identifierLabel="Partner username"
       identifierKind="username"
-      userType="PARTNER"
+      userType={ROLES.partner}
       dialogTitle="Partner password reset"
       dialogMessage="Share this temporary password with the partner. They will be asked to change it on next login."
       extraItemLabel="Username"

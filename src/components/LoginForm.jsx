@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from 'lucide-react'
 import { loginPortalPartner, loginPortalUser } from '../api/authApi'
 import { changePasswordPathForRole, homePathForRole } from '../auth/authStorage'
+import { MESSAGES } from '../constants'
 import {
   preventPartnerUsernameSpaceInput,
   preventPartnerUsernameSpaceKeys,
@@ -126,7 +127,7 @@ export default function LoginForm({ variant }) {
     } catch (error) {
       setErrors({
         ...initialErrors,
-        form: error.message || 'Something went wrong. Please try again.',
+        form: error.message || MESSAGES.genericError,
       })
     } finally {
       setSubmitting(false)
