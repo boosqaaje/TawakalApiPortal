@@ -85,6 +85,8 @@ export default function LoginForm({ variant }) {
 
     if (!trimmedIdentifier) {
       next.identifier = isPartner ? 'Username is required.' : 'Email is required.'
+    } else if (isPartner && trimmedIdentifier.includes('@')) {
+      next.identifier = 'You should enter a partner username instead of an email.'
     } else if (isPartner && /\s/.test(identifier)) {
       next.identifier = 'Spaces are not allowed in usernames.'
     } else if (!isPartner && !isValidEmail(trimmedIdentifier)) {
